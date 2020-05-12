@@ -204,7 +204,11 @@ server <- function(input, output, session) {
         jhu_data %>%
             filter(country_or_region == input$which_country) -> jhu_country
         
-        jhu_country
+        jhu_country %>%
+            group_by(date, covid_type) %>%
+            summarize(cumulative_number = sum(cumulative_number)) -> final_jhu
+        
+        final_jhu
     })
     
     ## Define your renderPlot({}) for JHU panel that plots the reactive variable. ALL PLOTTING logic goes here.
